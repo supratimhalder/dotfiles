@@ -1,0 +1,21 @@
+#!/bin/sh
+# usage: screenshot <full|area|window> <file|clip>
+
+dir="$HOME/Pictures/Screenshots"
+mkdir -p "$dir"
+file="$dir/screenshot-$(date +%F_%H-%M-%S).png"
+
+case "$1" in
+    area)   opts="-s" ;;
+    window) opts="-i $(xprop -root _NET_ACTIVE_WINDOW | awk '{print $5}')" ;;
+    full)   opts="" ;;
+    *)      exit 1 ;;
+esac
+
+if [ "$2" = "clip" ]; then
+    tmp=$(mktemp --suffix=.png)
+    maim $opts "$tmp" && xclip -selection clipboard -t image/png -i "$tmp"
+    rm -f "$tmp"
+else
+    maim $opts "$file"
+fi

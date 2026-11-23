@@ -1,0 +1,18 @@
+#!/bin/sh
+mic() {
+    out=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ 2>/dev/null) || { echo "mic n/a"; return; }
+    case "$out" in
+        *MUTED*) echo "mic muted" ;;
+        *) echo "mic $(echo "$out" | awk '{printf "%d", $2*100}')%" ;;
+    esac
+}
+
+i3status | while IFS= read -r line; do
+    first="${line%% | *}"
+    rest="${line#* | }"
+    if [ "$first" = "$line" ]; then
+        echo "$line | $(mic)"
+    else
+        echo "$first | $(mic) | $rest"
+    fi
+done
