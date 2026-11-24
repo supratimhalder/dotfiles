@@ -125,7 +125,7 @@ exec_always --no-startup-id xrandr --output HDMI-2 --mode 1920x1080 --rate 120
 # Bar
 bar {
     separator_symbol " | "
-    status_command ~/.local/bin/i3status-mic
+    status_command i3status
     position top
     height 22
     workspace_min_width 22
